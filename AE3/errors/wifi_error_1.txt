@@ -1,0 +1,38 @@
+Wifi Connection class
+Connecting to Wi-Fi network: test_iot...
+.....Wifi Connected: {self.ssid}
+OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> 
+
+Wifi Connection class
+Connecting to Wi-Fi network: test_iot...
+......Wifi Connected: test_iot
+[{'key': 'connecting', 'metric': 'test_iot'}, {'key': 'conntection_delay', 'metric': '6'}, {'key': 'wifi_status', 'metric': 'Connected to test_iot'}]
+OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> 
+
+OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> 
+
+OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> 
+
+OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> OpenMV 0406243; MicroPython 57e82328; OpenMV-AE3 with AE302F80F55D5AE
+Type "help()" for more information.
+>>> 
