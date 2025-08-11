@@ -14,22 +14,23 @@ class wifi_connect:
         self.connect_metric = {}
         self.metric = self.empty_wifi_metric()
         self.singlemetric = []
+        self.wlan = None
         print("Wifi Connection class")
 
     def connect(self):
-        wlan = network.WLAN(network.STA_IF)
-        wlan.active(True)
+        self.wlan = network.WLAN(network.STA_IF)
+        self.wlan.active(True)
         self.load_single_metric("connecting", self.ssid)
         print(f"Connecting to Wi-Fi network: {self.ssid}...")
-        wlan.connect(self.ssid, self.password)
+        self.wlan.connect(self.ssid, self.password)
         connection_timeout = 20  # Timeout in seconds
-        while not wlan.isconnected() and connection_timeout > 0:
+        while not self.wlan.isconnected() and connection_timeout > 0:
             print(".", end="")
             time.sleep(1)
             connection_timeout -= 1
         delay = 20 - connection_timeout
         self.load_single_metric("conntection_delay", str(delay))
-        if wlan.isconnected():
+        if self.wlan.isconnected():
             print (f"Wifi Connected: {self.ssid}")
             self.load_single_metric("wifi_status", f"Connected to {self.ssid}")
         else:
