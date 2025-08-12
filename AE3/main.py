@@ -1,12 +1,12 @@
 # OTAinfo, Inc - By: Akshay - Mon Aug 11 2025
 
-from wifi import wifi_connection
+from wifi.wifi_connection import wifi_connect
 from otainfo_apis import apicall
 import uasyncio as asyncio
 import time
 
 
-con = wifi_connection('', '')
+con = wifi_connect('', '')
 con.connect()
 while not con.wlan.isconnected():
     time.sleep(1)
