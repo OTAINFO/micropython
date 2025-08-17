@@ -6,7 +6,7 @@ import uasyncio as asyncio
 import time
 
 
-con = wifi_connect('', '')
+con = wifi_connect(' ', ' ')
 con.connect()
 while not con.wlan.isconnected():
     time.sleep(1)
@@ -14,10 +14,10 @@ while not con.wlan.isconnected():
 nobj =  {  'url' : 'https://otainfo.us:9001/',
             'url_port' : '9001',
             'protocol' : 'https',
-            'header' :{'Content-Type':'application/json'},
+            'header' :{"Content-Type": "application/json"},
             'status' : '',
             'method' : 'POST',
-            'uri' : 'api-token-auth/',
+            'uri' : 's1/api-token-auth/',
             'payload' : '{"username" : "", "password" : ""}',
             'response' : '',
             'certificate' : '',
@@ -25,6 +25,7 @@ nobj =  {  'url' : 'https://otainfo.us:9001/',
             }
 
 api_req = apicall.api_request(nobj)
-asyncio.run(api_req.make_post_call())
+api_req.make_post_call()
+#asyncio.run(api_req.make_post_call())
 
 
