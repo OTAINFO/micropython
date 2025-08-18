@@ -11,6 +11,7 @@ con.connect()
 while not con.wlan.isconnected():
     time.sleep(1)
 
+
 nobj =  {  'url' : 'https://otainfo.us:9001/',
             'url_port' : '9001',
             'protocol' : 'https',
