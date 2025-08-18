@@ -31,14 +31,12 @@ class api_request():
         print("In api")
         self.args = args
 
-    def make_post_call(self):
+    async def make_post_call(self):
         print("make post call")
-        print(self.args.keys())
         if 'url' in self.args.keys():
             if self.validate_url(self.args['url']):
                 fqurl = self.args['url'] + self.args['uri']
                 headers = self.args['header']
-                print(headers)
                 payload = ''
                 if self.args['method'] == 'POST':
                     payload = self.args['payload']
@@ -53,22 +51,18 @@ class api_request():
         return False
 
     def post_data_with_headers(self, url, data, headers):
+        response = None
         try:
-            print(url)
-            print(data)
-            print(headers)
-            response = requests.post(url, json=data, headers=headers)
-            print("Status Code:", response.status_code)
-            print("Response Content:", response.content)
-           # print("Response apperent_encoding:", response.apparent_encoding)
-            #print("Response elapsed:", response.elapsed)
-            #print("Response history:", response.history)
-            #print("Response request:", response.request)
-            #--#print("Response reason:", response.reason)
-            #print("Response text:", response.text)
-            #print("Response url:", response.url)
-            #response.close()
+            response = requests.post(url, data=data, headers=headers)
+            # print("Status Code:", response.status_code)
+            # print("Response Content:", response.content)
+            # print("Response encoding:", response.encoding)
+            # print("Response headers: ", response.headers)
+            # print("Response reason:", response.reason)
+            # print("Response Content: ", response.content)
+            # print("Response json: " ,response.json())
+            # print("Response status_code: " , response.status_code)
         except Exception as e:
             print("Error during POST request:", e)
-
-
+        if response:
+            print("Status: : ", response.status_code)

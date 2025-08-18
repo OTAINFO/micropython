@@ -2,11 +2,11 @@
 
 from wifi.wifi_connection import wifi_connect
 from otainfo_apis import apicall
-import uasyncio as asyncio
+import asyncio
 import time
 
 
-con = wifi_connect(' ', ' ')
+con = wifi_connect('', '')
 con.connect()
 while not con.wlan.isconnected():
     time.sleep(1)
@@ -17,7 +17,7 @@ nobj =  {  'url' : 'https://otainfo.us:9001/',
             'header' :{"Content-Type": "application/json"},
             'status' : '',
             'method' : 'POST',
-            'uri' : 's1/api-token-auth/',
+            'uri' : '<sfid>/api-token-auth/',
             'payload' : '{"username" : "", "password" : ""}',
             'response' : '',
             'certificate' : '',
@@ -25,7 +25,7 @@ nobj =  {  'url' : 'https://otainfo.us:9001/',
             }
 
 api_req = apicall.api_request(nobj)
-api_req.make_post_call()
-#asyncio.run(api_req.make_post_call())
+#api_req.make_post_call()
+asyncio.run(api_req.make_post_call())
 
 
