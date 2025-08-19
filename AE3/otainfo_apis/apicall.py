@@ -31,7 +31,10 @@ class api_request():
         print("In api")
         self.args = args
 
-    async def make_post_call(self):
+    def update_args(self, args):
+        self.args = args
+
+    async def make_http_call(self):
         print("make post call")
         if 'url' in self.args.keys():
             if self.validate_url(self.args['url']):
@@ -40,8 +43,15 @@ class api_request():
                 payload = ''
                 if self.args['method'] == 'POST':
                     payload = self.args['payload']
-
-                self.post_data_with_headers(fqurl, payload, headers)
+                    self.post_data_with_headers(fqurl, payload, headers)
+                if self.args['method'] == 'HEAD':
+                    fqurl = self.args['url']
+                    payload = ''
+                    return self.head_method(fqurl)
+                if self.args['method'] == 'GET':
+                    headers = self.args['header']
+                    fqurl = self.args['url']
+                    return self.get_method(fqurl)
                 print("Request complete.")
 
 
@@ -66,3 +76,23 @@ class api_request():
             print("Error during POST request:", e)
         if response:
             print("Status: : ", response.status_code)
+
+    def head_method(self, url):
+        response = None
+        try:
+            response = requests.head(url)
+        except:
+            print("Error checking for file: ", url)
+        if response:
+            print("Satus: ", response.status_code)
+            if response.status_code == 200:
+                return True
+        return False
+
+    def get_method(self, url):
+        response = None
+        try:
+            response = requests.get(url)
+        except:
+            print("HTTP GET could not execute for: " , url)
+        return response

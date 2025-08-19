@@ -8,6 +8,7 @@ import omv
 import machine
 import json
 from config import config
+from update import update
 
 cfg = config.config('')
 cfg.loadconfig()
@@ -42,4 +43,7 @@ nobj =  {  'url' : 'https://otainfo.us:9001/',
 
 api_req = apicall.api_request(nobj)
 #api_req.make_post_call()
-asyncio.run(api_req.make_post_call())
+asyncio.run(api_req.make_http_call())
+update_process = update.update(cfgdata)
+update_process.checkandgetupdate()
+
