@@ -13,15 +13,18 @@ class config:
 
         filefound = False
         try:
-            _temp = open('config.json', 'r')
+            _temp = open('./config/config.json', 'r')
             filefound = True
         except:
-            pass
+            print("Error in reading config.json")
+        print("File Found? ", filefound)
         if filefound:
             config_file = open('./config/config.json', 'r')
             secured_config_file_contents = config_file.read()
+            print("Contents: ", secured_config_file_contents)
             config_file_contents = self.decrypt_contents(secured_config_file_contents)
             config_file.close()
+            print(config_file_contents)
             if(config_file_contents):
                 self.config = eval(config_file_contents)
                 if len(self.config) > 0:
@@ -53,15 +56,16 @@ class config:
 
             for key in contents.keys():
                 if self.config[key] != contents[key]:
-                   print('Contents changed for key: ' + key + ' old: ' + self.config[key] + '  new: ' + contents[key])
-                   newkey = 'ov' + key
-                   self.config[newkey] = self.config[key]
-                   self.config[key] = contents[key]
+                    print('Contents changed for key: ' + key + ' old: ' + self.config[key] + '  new: ' + contents[key])
+                    newkey = 'ov' + key
+                    self.config[newkey] = self.config[key]
+                    self.config[key] = contents[key]
 
        #Type Error: Object with buffer protocol required
-       #config_file = open('./config/config.json', 'w')
-       # config_file.write(self.config)
-       # config_file.close()
+        print("Saving ..")
+        config_file = open('./config/config.json', 'w', encoding='utf-8')
+        json.dump(self.config, config_file)
+        config_file.close()
 
 class st:
 
@@ -81,3 +85,12 @@ class st:
 
     def getcacheconfig(self):
         return self.config
+
+    def saveconfig(self):
+        cfg = config('')
+        cfg.saveconfig(self.config)
+
+    def addkey(self, key, value):
+        self.config[key] = value
+        #pass
+

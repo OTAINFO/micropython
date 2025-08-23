@@ -9,12 +9,14 @@ class update:
         self.cfg = config
 
     def checkandgetupdate(self):
+        print("checking for Update..")
+        if True:
 
-        try:
-            if(self.cfg['update']):
+            if('update' in self.cfg.keys and self.cfg['update']):
+
                 url = self.cfg['update']
-
-                nobj =  {  'url' : url,
+                url = "https://otainfo.us:9001/test1.py"
+                nobj1 =  {  'url' : url,
                             'url_port' : '9001',
                             'protocol' : 'https',
                             'header' :{"Content-Type": "application/json"},
@@ -26,18 +28,26 @@ class update:
                             'certificate' : '',
                             'retries' : ''
                             }
-                api_req = apicall.api_request(nobj)
-                file_found = asyncio.run(api_req.make_http_call())
-                time.sleep(10)
-                print(file_found)
-                if file_found:
-                    nobj['method'] = 'GET'
-                    nobj['header'] = {"Content-Type": "text/plain"}
-                api_req.update_args(nobj)
-                filedata = asyncio.run(api_req.make_http_call())
-                print(filedata)
-        except:
-            print("No updates found.. ")
+                api_req = apicall.api_request(nobj1)
+                response = asyncio.run(api_req.make_http_call())
+                if 'exception' in response.keys():
+                    response['message'] = 'Failed to update from: ' + url
+                    response['status'] = 'Failed'
+                    response['device_id'] = ''
+
+                    #upload metric to OTAinfo cloud
+                    #exit
+                    print('Error in update')
+                    return
+
+                time.sleep(4)
+                # print(file_found)
+                if response:
+                    nobj1['method'] = 'GET'
+                    nobj1['header'] = response['Content-Type']
+                api_req.update_args(nobj1)
+                asyncio.run(api_req.make_http_call())
+                #print(len(response.content))
 
 
 
