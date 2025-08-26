@@ -26,6 +26,7 @@ import requests
 import json
 import deflate
 import os
+from config import config
 
 
 class api_request():
@@ -67,7 +68,20 @@ class api_request():
     def post_data_with_headers(self, url, data, headers):
         response = None
         try:
+            print(url)
             response = requests.post(url, data=data, headers=headers)
+            if('api-token-auth' in url):
+                print("Auth api was called")
+                if response.status_code == 200:
+                    #save token
+                    st = config.st()
+                    st.addkey('auth_api', response.status_code)
+                    response_data = eval(response.content)
+                    print(response_data)
+                    if 'token' in response_data.keys():
+                        st.addkey('token', response_data['token'])
+                        print("Cloud access token saved in cache..")
+
             # print("Status Code:", response.status_code)
             # print("Response Content:", response.content)
             # print("Response encoding:", response.encoding)

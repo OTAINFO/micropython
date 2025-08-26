@@ -10,9 +10,9 @@ class update:
 
     def checkandgetupdate(self):
         print("checking for Update..")
+        print(self.cfg)
         if True:
-
-            if('update' in self.cfg.keys and self.cfg['update']):
+            if('update' in self.cfg.keys() and self.cfg['update']):
 
                 url = self.cfg['update']
                 url = "https://otainfo.us:9001/test1.py"

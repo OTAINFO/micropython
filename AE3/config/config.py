@@ -15,18 +15,23 @@ class config:
         try:
             _temp = open('./config/config.json', 'r')
             filefound = True
+            print(_temp)
         except:
             print("Error in reading config.json")
         print("File Found? ", filefound)
         if filefound:
-            config_file = open('./config/config.json', 'r')
+            config_file = open('./config/config.json', 'r', encoding='utf-8')
             secured_config_file_contents = config_file.read()
             print("Contents: ", secured_config_file_contents)
             config_file_contents = self.decrypt_contents(secured_config_file_contents)
             config_file.close()
             print(config_file_contents)
             if(config_file_contents):
-                self.config = eval(config_file_contents)
+                try:
+                    self.config = eval(config_file_contents.strip())
+                except Exception as e:
+                    print("Exception: " , e)
+
                 if len(self.config) > 0:
                     print("Config loaded")
 
@@ -67,6 +72,11 @@ class config:
         json.dump(self.config, config_file)
         config_file.close()
 
+    def getvalueifkeypresent(self, key):
+        if key in self.config.keys():
+            return self.config[key]
+        return '-'
+
 class st:
 
     _instance = None
@@ -77,11 +87,13 @@ class st:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, config):
+    def __init__(self):
        if not hasattr(self, '_initialized'):  # Prevent re-initialization on subsequent calls
            print("st initialized!")
            self._initialized = True
-           self.config = config
+
+    def loadconfig(self, config):
+        self.config = config
 
     def getcacheconfig(self):
         return self.config
@@ -92,5 +104,12 @@ class st:
 
     def addkey(self, key, value):
         self.config[key] = value
+
+    def getvalueifkeypresent(self, key):
+        if key in self.config.keys():
+            return self.config[key]
+        return '-'
         #pass
+    def getinitializedvalue(self):
+        return self._initialized
 

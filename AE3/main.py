@@ -25,19 +25,15 @@ cfg.loadconfig()
 cfgdata = cfg.getconfig()
 
 cfgdata_type_validation = isinstance(cfgdata, dict)
-print(cfgdata_type_validation)
+macaddress= ""
 count = sum(1 for _ in cfgdata.keys())
 if (cfgdata and cfgdata_type_validation and count > 0):
     print("Config loaded")
-st =config.st(cfgdata)
-print(omv.board_id())
+st =config.st()
+st.loadconfig(cfgdata)
 st.addkey('board_id', omv.board_id())
-print(omv.arch())
 st.addkey('arch', omv.arch())
-print(omv.version_string())
 st.addkey('hw_version_str', omv.version_string())
-#print(machine.unique_id())
-#st.addkey('unique_id', machine.unique_id())
 st.saveconfig()
 byte_string = machine.unique_id()
 decimal_value = int.from_bytes(byte_string)
@@ -47,18 +43,33 @@ try:
     con.connect()
     while not con.wlan.isconnected():
         time.sleep(1)
+    macaddress = con.getmac()
 except:
     print('wifi credentials absent')
+print("Mac Address: " , macaddress)
+cfgdata = st.getcacheconfig()
 
+cloudpass = st.getvalueifkeypresent('cloudpassword')
+cloudusername=st.getvalueifkeypresent('cloudusername')
+cloudurl=st.getvalueifkeypresent("cloudurl")
+cloudsfid= st.getvalueifkeypresent("sfid")
+cloudcompanyid = st.getvalueifkeypresent('coudcompanyid')
 
+payload = {}
+payload['username']= cloudusername
+payload['password'] = cloudpass
+#payload['device_id'] = macaddress
+payload['model'] = st.getvalueifkeypresent('arch')
+json_str_payload = str(json.dumps(payload))
+uri = cloudsfid + '/api-token-auth/'
 nobj =  {  'url' : 'https://otainfo.us:9001/',
             'url_port' : '9001',
             'protocol' : 'https',
             'header' :{"Content-Type": "application/json"},
             'status' : '',
             'method' : 'POST',
-            'uri' : '<sfid>/api-token-auth/',
-            'payload' : '{"username" : "", "password" : ""}',
+            'uri' : uri,
+            'payload' : json_str_payload,
             'response' : '',
             'certificate' : '',
             'retries' : ''
