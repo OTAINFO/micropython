@@ -22,10 +22,8 @@ class config:
         if filefound:
             config_file = open('./config/config.json', 'r', encoding='utf-8')
             secured_config_file_contents = config_file.read()
-            print("Contents: ", secured_config_file_contents)
             config_file_contents = self.decrypt_contents(secured_config_file_contents)
             config_file.close()
-            print(config_file_contents)
             if(config_file_contents):
                 try:
                     self.config = eval(config_file_contents.strip())
@@ -43,8 +41,6 @@ class config:
 
     def saveconfig(self, contents):
         print('Saving Config ... ')
-        print(self.config)
-        print(contents)
         if (self.config != contents):
             print('Contents Updated.. ')
             keys_added = set(contents.keys()) - set(self.config.keys())
@@ -69,6 +65,7 @@ class config:
        #Type Error: Object with buffer protocol required
         print("Saving ..")
         config_file = open('./config/config.json', 'w', encoding='utf-8')
+        print("Config data being saved: ", self.config)
         json.dump(self.config, config_file)
         config_file.close()
 
@@ -100,6 +97,7 @@ class st:
 
     def saveconfig(self):
         cfg = config('')
+        cfg.loadconfig()
         cfg.saveconfig(self.config)
 
     def addkey(self, key, value):
@@ -112,4 +110,3 @@ class st:
         #pass
     def getinitializedvalue(self):
         return self._initialized
-

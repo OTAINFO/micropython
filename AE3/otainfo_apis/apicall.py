@@ -72,24 +72,27 @@ class api_request():
             response = requests.post(url, data=data, headers=headers)
             if('api-token-auth' in url):
                 print("Auth api was called")
+                print("status code: ", response.status_code)
                 if response.status_code == 200:
                     #save token
+                    print("Saving token")
                     st = config.st()
+                    print("Singleton loaded")
                     st.addkey('auth_api', response.status_code)
-                    response_data = eval(response.content)
+                    print("Saving response code")
+                    response_data = json.loads(response.content)
+                    print("Response data format changed")
                     print(response_data)
                     if 'token' in response_data.keys():
                         st.addkey('token', response_data['token'])
                         print("Cloud access token saved in cache..")
-
-            # print("Status Code:", response.status_code)
-            # print("Response Content:", response.content)
-            # print("Response encoding:", response.encoding)
-            # print("Response headers: ", response.headers)
-            # print("Response reason:", response.reason)
-            # print("Response Content: ", response.content)
-            # print("Response json: " ,response.json())
-            # print("Response status_code: " , response.status_code)
+                        if 'nup' in response_data.keys():
+                            print("New username/password must be present")
+                            st.addkey('cloudpass', response_data['nup'])
+                            st.addkey('cloudusername', response_data['username'])
+                            print("New username/password found")
+                        st.saveconfig()
+                        print("New config saved")
         except Exception as e:
             print("Error during POST request:", e)
         if response:
