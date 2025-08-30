@@ -12,13 +12,15 @@ from update import update
 import alif
 import deflate
 import io
-
+from metrics import metrics
 #print(help('requests.head'))
 #print(dir(alif))
 #alif.info()
 #print("alif data: ", alif_data)
 #print(alif.Flash())
 #print("usc_msc: " ,alif.usb_msc)
+print(dir(time))
+#print(time.strftime("%Y-%m-%d %H:%M:%S", current_time_struct))
 
 cfg = config.config('')
 cfg.loadconfig()
@@ -37,16 +39,20 @@ st.addkey('hw_version_str', omv.version_string())
 st.saveconfig()
 byte_string = machine.unique_id()
 decimal_value = int.from_bytes(byte_string)
-
+connect_metric = {}
 try:
     con = wifi_connect(cfgdata['wifi_username'], cfgdata['wifi_password'])
-    con.connect()
+    connect_metric= con.connect()
     while not con.wlan.isconnected():
         time.sleep(1)
     macaddress = con.getmac()
 except:
     print('wifi credentials absent')
+upload_metric = metrics.metrics().wifi_metric()
+print("Upload_metric: ", upload_metric)
+print("connect_metric: " , connect_metric)
 print("Mac Address: " , macaddress)
+st.addkey("mac", macaddress)
 cfgdata = st.getcacheconfig()
 
 cloudpass = st.getvalueifkeypresent('cloudpassword')

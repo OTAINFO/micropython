@@ -7,6 +7,8 @@
 import network
 import time
 import ubinascii
+import socket
+import struct
 #import pyb
 
 class wifi_connect:
@@ -15,6 +17,7 @@ class wifi_connect:
         self.ssid = ssid
         self.password = password
         self.connect_metric = self.empty_wifi_metric()
+        self.time_now = ""
         #self.metric = self.empty_wifi_metric()
 
         self.singlemetric = []
@@ -38,13 +41,17 @@ class wifi_connect:
         if self.wlan.isconnected():
             print (f"Wifi Connected: {self.ssid}")
             self.load_single_metric("wifi_status", f"Connected to {self.ssid}")
+            print("Time now: ", self.getntptime())
+            self.connect_metric['status'] = 1
         else:
             print (f"Wifi connection failed: {self.ssid}")
             self.load_single_metric("wifi_status", f"Failed to connect with {self.ssid}")
+            self.connect_metric['status'] = 0
         self.connect_metric['mac'] = self.getmac()
         self.connect_metric['singlemetric'] = self.singlemetric
         self.connect_metric["wifi_mac"] = self.getmac()
         print(self.connect_metric)
+        return self.connect_metric
 
     def load_single_metric(self, key, metric):
         _smetric = self.empty_single_metric()
@@ -64,4 +71,21 @@ class wifi_connect:
         print(mac_address)
         return mac_address
 
+    def getntptime(self):
 
+        TIMESTAMP = 2208988800
+
+        client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+        # Get addr info via DNS
+        addr = socket.getaddrinfo("pool.ntp.org", 123)[0][4]
+
+         # Send query
+        client.sendto("\x1b" + 47 * "\0", addr)
+        data, address = client.recvfrom(1024)
+
+         # Print time
+        t = struct.unpack(">IIIIIIIIIIII", data)[10] - TIMESTAMP
+        return t
+        ##if localtime is implemented
+        #print("Year:%d Month:%d Day:%d Time: %d:%d:%d" % (time.localtime(t)[0:6]))
