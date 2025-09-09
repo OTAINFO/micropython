@@ -82,7 +82,7 @@ class api_request():
                     print("Saving response code")
                     response_data = json.loads(response.content)
                     print("Response data format changed")
-                    print(response_data)
+                    #print(response_data)
                     if 'token' in response_data.keys():
                         st.addkey('token', response_data['token'])
                         print("Cloud access token saved in cache..")
@@ -93,6 +93,10 @@ class api_request():
                             print("New username/password found")
                         st.saveconfig()
                         print("New config saved")
+            else:
+                print(response.status_code)
+                print(response.content)
+
         except Exception as e:
             print("Error during POST request:", e)
         if response:
@@ -101,11 +105,11 @@ class api_request():
     def head_method(self, url):
         response = None
         response_object = {}
-        print("url: " + url)
+        #print("url: " + url)
         headers = {"Content-Type" : "plain/text",
         'User-Agent': 'Mozilla/5.0'}
         try:
-            print("url: " + url)
+            #print("url: " + url)
             headers = {"Content-Type" : "text/plain"}
             response = requests.head(url, headers=headers)
         except Exception as e:
@@ -135,9 +139,9 @@ class api_request():
         response = None
         try:
             response = requests.get(url)
-            print("File get: ", response.status_code)
-            print("response heaqders: ", response.headers)
-            print("Response Content: " , response.content)
+            #print("File get: ", response.status_code)
+            #print("response heaqders: ", response.headers)
+            #print("Response Content: " , response.content)
         except Exception as e:
             print("HTTP GET could not execute for: " , url)
             print(e)

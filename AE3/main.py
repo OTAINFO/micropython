@@ -49,9 +49,20 @@ try:
 except:
     print('wifi credentials absent')
 upload_metric = metrics.metrics().wifi_metric()
-print("Upload_metric: ", upload_metric)
-print("connect_metric: " , connect_metric)
-print("Mac Address: " , macaddress)
+if 'singlemetric' in connect_metric.keys():
+    upload_metric['metric_data'] = connect_metric['singlemetric']
+else:
+    upload_metric['metric_data'] = '-'
+
+
+if 'status' in connect_metric.keys():
+    upload_metric['status'] = connect_metric['status']
+
+upload_metric['record_date'] = "2025-09-09T00:00:00"
+#connect_metric['record_time']
+#print("Upload_metric: ", upload_metric)
+#print("connect_metric: " , connect_metric)
+#print("Mac Address: " , macaddress)
 st.addkey("mac", macaddress)
 cfgdata = st.getcacheconfig()
 
@@ -84,6 +95,30 @@ nobj =  {  'url' : 'https://otainfo.us:9001/',
 api_req = apicall.api_request(nobj)
 asyncio.run(api_req.make_http_call())
 
-update_process = update.update(cfgdata)
-update_process.checkandgetupdate()
+uri = cloudsfid + '/mupload/'
+
+metric_obj =  {  'url' : 'https://otainfo.us:9001/',
+'url_port' : '9001',
+'protocol' : 'https',
+'header' :{},
+'status' : '',
+'method' : 'POST',
+'uri' : uri,
+'payload' : '',
+'response' : '',
+'certificate' : '',
+'retries' : ''
+}
+metric_obj['uri'] = uri
+metric_obj['header'] = {"Authorization" : "JWT " + cfgdata['token'], "Content-Type" : "application/json"}
+upload_metric['banner'] = st.getvalueifkeypresent('mac')
+print(upload_metric)
+json_metric = str(json.dumps(upload_metric))
+metric_obj['payload'] = json_metric
+api_req.update_args(metric_obj)
+asyncio.run(api_req.make_http_call())
+
+
+#update_process = update.update(cfgdata)
+#update_process.checkandgetupdate()
 

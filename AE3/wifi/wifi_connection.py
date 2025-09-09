@@ -41,15 +41,18 @@ class wifi_connect:
         if self.wlan.isconnected():
             print (f"Wifi Connected: {self.ssid}")
             self.load_single_metric("wifi_status", f"Connected to {self.ssid}")
+            self.connect_metric['metric_data'] = f"Connected to {self.ssid}"
             print("Time now: ", self.getntptime())
             self.connect_metric['status'] = 1
         else:
             print (f"Wifi connection failed: {self.ssid}")
             self.load_single_metric("wifi_status", f"Failed to connect with {self.ssid}")
+            self.connect_metric['metric_data'] = f"Failed to connect with {self.ssid}"
             self.connect_metric['status'] = 0
         self.connect_metric['mac'] = self.getmac()
         self.connect_metric['singlemetric'] = self.singlemetric
         self.connect_metric["wifi_mac"] = self.getmac()
+        self.connect_metric['record_time'] = self.getntptime()
         print(self.connect_metric)
         return self.connect_metric
 

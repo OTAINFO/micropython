@@ -1,6 +1,6 @@
 # Untitled - By: Akshay - Tue Aug 26 2025
 from config import config
-
+import random
 class metrics:
 
     def __init__(self):
@@ -18,7 +18,8 @@ class metrics:
                  "outcome" : "",
                  "record_date" : "",
                  "status" : "",
-                 "success" : 0
+                 "success" : 0,
+                 "label_data" : '',
                  }
 
     def wifi_metric(self):
@@ -37,6 +38,8 @@ class metrics:
         _empty_metric["device_id"] = _device_data['device_id']
         _empty_metric["metric_name"] = "wifi"
         _empty_metric["motive"] = "Establish Wifi Connection"
+        print(dir(random))
+        _empty_metric["label_data"] = st.getvalueifkeypresent('mac') + '-' + str(random.random())
         #Update after the motive is complete: message, metric_data, outcome, record_date,
         #                                     status and success
         return _empty_metric
