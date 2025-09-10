@@ -57,10 +57,20 @@ else:
 
 if 'status' in connect_metric.keys():
     upload_metric['status'] = connect_metric['status']
+if 'record_time' in connect_metric.keys():
+    upload_metric['record_date'] = connect_metric['record_time']
+else:
+    upload_metric['record_date'] = "1970-01-01T00:00:00"
 
-upload_metric['record_date'] = "2025-09-09T00:00:00"
-#connect_metric['record_time']
-#print("Upload_metric: ", upload_metric)
+if 'metric_data' in connect_metric.keys():
+    upload_metric['outcome'] = connect_metric['metric_data']
+
+if 'status' in connect_metric.keys():
+    upload_metric['message'] = 'Fail'
+    if connect_metric['status'] == 1:
+        upload_metric['message'] = 'Success'
+upload_metric['device_id'] = macaddress
+print("Upload_metric: ", upload_metric)
 #print("connect_metric: " , connect_metric)
 #print("Mac Address: " , macaddress)
 st.addkey("mac", macaddress)
