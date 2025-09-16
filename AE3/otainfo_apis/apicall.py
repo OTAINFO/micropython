@@ -82,7 +82,7 @@ class api_request():
                     print("Saving response code")
                     response_data = json.loads(response.content)
                     print("Response data format changed")
-                    #print(response_data)
+                    print("Auth api response: ", response_data)
                     if 'token' in response_data.keys():
                         st.addkey('token', response_data['token'])
                         print("Cloud access token saved in cache..")

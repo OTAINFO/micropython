@@ -13,14 +13,16 @@ import alif
 import deflate
 import io
 from metrics import metrics
-#print(help('requests.head'))
-#print(dir(alif))
-#alif.info()
+import uos
+
+print(dir(alif))
+alif.info()
 #print("alif data: ", alif_data)
-#print(alif.Flash())
-#print("usc_msc: " ,alif.usb_msc)
+print(alif.Flash())
+print("usc_msc: " ,alif.usb_msc)
 print(dir(time))
 #print(time.strftime("%Y-%m-%d %H:%M:%S", current_time_struct))
+
 
 cfg = config.config('')
 cfg.loadconfig()
@@ -102,6 +104,8 @@ nobj =  {  'url' : 'https://otainfo.us:9001/',
             'retries' : ''
             }
 
+
+
 api_req = apicall.api_request(nobj)
 asyncio.run(api_req.make_http_call())
 
@@ -129,6 +133,6 @@ api_req.update_args(metric_obj)
 asyncio.run(api_req.make_http_call())
 
 
-#update_process = update.update(cfgdata)
-#update_process.checkandgetupdate()
+update_process = update.update(cfgdata)
+update_process.checkandgetupdate()
 
