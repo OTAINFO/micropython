@@ -15,7 +15,7 @@ class config:
         try:
             _temp = open('./config/config.json', 'r')
             filefound = True
-            print(_temp)
+            print("File opened: ",_temp.name)
         except:
             print("Error in reading config.json")
         print("File Found? ", filefound)
@@ -65,9 +65,9 @@ class config:
        #Type Error: Object with buffer protocol required
         print("Saving ..")
         config_file = open('./config/config.json', 'w', encoding='utf-8')
-        print("Config data being saved: ", self.config)
         json.dump(self.config, config_file)
         config_file.close()
+        print("Config data saved")
 
     def getvalueifkeypresent(self, key):
         if key in self.config.keys():

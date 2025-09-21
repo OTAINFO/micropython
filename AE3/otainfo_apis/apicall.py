@@ -26,6 +26,7 @@ import requests
 import json
 import deflate
 import os
+
 from config import config
 
 
@@ -41,21 +42,25 @@ class api_request():
     async def make_http_call(self):
         print("making http call ..")
         if 'url' in self.args.keys():
+            print("url: " , self.args['url'])
             if self.validate_url(self.args['url']):
                 fqurl = self.args['url'] + self.args['uri']
                 headers = self.args['header']
                 payload = ''
                 if self.args['method'] == 'POST':
                     payload = self.args['payload']
+                    print("Method: POST")
                     self.post_data_with_headers(fqurl, payload, headers)
                 if self.args['method'] == 'HEAD':
                     fqurl = self.args['url']
+                    print("Method: HEAD")
                     payload = ''
                     return self.head_method(fqurl)
 
                 if self.args['method'] == 'GET':
                     headers = self.args['header']
                     fqurl = self.args['url']
+                    print("Method: GET")
                     return self.get_method(fqurl)
                 print("Request complete.")
 
@@ -91,11 +96,12 @@ class api_request():
                             st.addkey('cloudpass', response_data['nup'])
                             st.addkey('cloudusername', response_data['username'])
                             print("New username/password found")
+                    if 'update_url' in response_data.keys():
+                        st.addkey('update', response_data['update_url'])
                         st.saveconfig()
                         print("New config saved")
             else:
                 print(response.status_code)
-                print(response.content)
 
         except Exception as e:
             print("Error during POST request:", e)
@@ -105,11 +111,9 @@ class api_request():
     def head_method(self, url):
         response = None
         response_object = {}
-        #print("url: " + url)
         headers = {"Content-Type" : "plain/text",
         'User-Agent': 'Mozilla/5.0'}
         try:
-            #print("url: " + url)
             headers = {"Content-Type" : "text/plain"}
             response = requests.head(url, headers=headers)
         except Exception as e:
@@ -121,52 +125,39 @@ class api_request():
         if response:
             response_split = response.headers.split('\n')
             response_object = {}
+            response_headers = {}
             for elem in response_split:
                 _temp = elem.split(':')
                 key = _temp[0].strip()
                 value = _temp[1].strip()
                 if key == 'Content-Length':
                     value = int(value)
-                response_object[key] = value
+                response_headers[key] = value
             if 'status_code' not in response_object.keys():
                 response_object['status_code'] = response.status_code
             response_object['content'] = response.content
             response_object['encoding'] = response.encoding
             response_object['reason'] = response.reason
+            response_object['headers'] = response_headers
         return response_object
 
     def get_method(self, url):
         response = None
+        filename = url[url.rindex('/')+1:]
+        filewritepath = './repo'
+        fqfp = filewritepath + '/' + filename
         try:
             response = requests.get(url)
-            #print("File get: ", response.status_code)
-            #print("response heaqders: ", response.headers)
-            #print("Response Content: " , response.content)
+            if response.status_code == 200:
+                with open(fqfp, 'wb', encoding='utf-8') as f:
+                    try:
+                        f.write(response._content)
+                        print(f"File '{filename}' downloaded and saved successfully.")
+                    except Exception as ex:
+                        print("Exception: ",ex)
+            else:
+                print("File download error:  ", response.status_code)
         except Exception as e:
             print("HTTP GET could not execute for: " , url)
             print(e)
-        filename = url[url.rindex('/')+1:]
-
-        print(filename)
-        try:
-            print(response.content)
-        except Exception as e:
-            print("Error ... ")
-            print(e)
-        #data = deflate(response.content)
-        #print(data)
-        filewritepath = './repo'
-
-        try:
-            print("Checking for repo path")
-            os.chdir("./xyz")
-            print("repo path: ", "./xyz")
-        except:
-            print("Create Path Manually")
-            filewritepath = './repo'
-
-        fqfp = filewritepath + '/' + filename
-        with open(fqfp, "w", encoding='utf-8') as f:
-            f.write(response.content)
-            print("File downloaded successfully!")
         return response

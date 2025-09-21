@@ -53,7 +53,6 @@ class wifi_connect:
         self.connect_metric['singlemetric'] = self.singlemetric
         self.connect_metric["wifi_mac"] = self.getmac()
         self.connect_metric['record_time'] = self.getntptime()
-        print(self.connect_metric)
         return self.connect_metric
 
     def load_single_metric(self, key, metric):
@@ -71,7 +70,6 @@ class wifi_connect:
     def getmac(self):
         mac_address_bytes = self.wlan.config('mac')
         mac_address = ubinascii.hexlify(mac_address_bytes, ':').decode()
-        print(mac_address)
         return mac_address
 
     def getntptime(self):
@@ -90,5 +88,3 @@ class wifi_connect:
          # Print time
         t = struct.unpack(">IIIIIIIIIIII", data)[10] - TIMESTAMP
         return t
-        ##if localtime is implemented
-        #print("Year:%d Month:%d Day:%d Time: %d:%d:%d" % (time.localtime(t)[0:6]))

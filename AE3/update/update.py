@@ -12,7 +12,6 @@ class update:
 
     def checkandgetupdate(self):
         print("checking for Update..")
-        print(self.cfg)
         if True:
             if('update' in self.cfg.keys() and self.cfg['update']):
                 url = self.cfg['update']
@@ -44,9 +43,9 @@ class update:
                 # print(file_found)
                 if response:
                     nobj1['method'] = 'GET'
-                    nobj1['header'] = response['Content-Type']
+                    nobj1['header'] = response['headers']
                 api_req.update_args(nobj1)
-                asyncio.run(api_req.make_http_call())
+                response = asyncio.run(api_req.make_http_call())
                 #print(len(response.content))
 
 
@@ -81,7 +80,7 @@ class update:
             # Read file content
             file_data = data[i:i+size]
             i += (size + block_size - 1) // block_size * block_size  # align to 512
-            print(file_data)
+            #print(file_data)
             # Skip directories
             if name.endswith("/"):
                 try:

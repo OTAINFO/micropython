@@ -15,15 +15,8 @@ import io
 from metrics import metrics
 import uos
 
-print(dir(alif))
 alif.info()
-#print("alif data: ", alif_data)
-print(alif.Flash())
-print("usc_msc: " ,alif.usb_msc)
-print(dir(time))
-#print(time.strftime("%Y-%m-%d %H:%M:%S", current_time_struct))
-
-
+print("usb_msc: " ,alif.usb_msc)
 cfg = config.config('')
 cfg.loadconfig()
 cfgdata = cfg.getconfig()
@@ -73,8 +66,6 @@ if 'status' in connect_metric.keys():
         upload_metric['message'] = 'Success'
 upload_metric['device_id'] = macaddress
 print("Upload_metric: ", upload_metric)
-#print("connect_metric: " , connect_metric)
-#print("Mac Address: " , macaddress)
 st.addkey("mac", macaddress)
 cfgdata = st.getcacheconfig()
 
@@ -126,13 +117,10 @@ metric_obj =  {  'url' : 'https://otainfo.us:9001/',
 metric_obj['uri'] = uri
 metric_obj['header'] = {"Authorization" : "JWT " + cfgdata['token'], "Content-Type" : "application/json"}
 upload_metric['banner'] = st.getvalueifkeypresent('mac')
-print(upload_metric)
 json_metric = str(json.dumps(upload_metric))
 metric_obj['payload'] = json_metric
 api_req.update_args(metric_obj)
 asyncio.run(api_req.make_http_call())
 
-
 update_process = update.update(cfgdata)
 update_process.checkandgetupdate()
-
