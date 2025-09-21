@@ -160,4 +160,4 @@ class api_request():
         except Exception as e:
             print("HTTP GET could not execute for: " , url)
             print(e)
-        return response
+        return response, fqfp

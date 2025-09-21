@@ -45,12 +45,16 @@ class update:
                     nobj1['method'] = 'GET'
                     nobj1['header'] = response['headers']
                 api_req.update_args(nobj1)
-                response = asyncio.run(api_req.make_http_call())
+                response, filepath = asyncio.run(api_req.make_http_call())
+                print(dir(filepath))
+                print(filepath)
+                self.extract_tar_gz(filepath)
                 #print(len(response.content))
 
 
-    def extract_tar_gz(filename, output_dir="."):
+    def extract_tar_gz(self, filename, output_dir="."):
         # Step 1: decompress gzip into memory/file-like object
+        print("fqfp: " ,filename)
         with open(filename, "rb") as f:
             with deflate.DeflateIO(f, deflate.AUTO) as gz:
                 data = gz.read()
