@@ -75,6 +75,7 @@ class api_request():
         try:
             print(url)
             response = requests.post(url, data=data, headers=headers)
+            print("Post response: ", response.content)
             if('api-token-auth' in url):
                 print("Auth api was called")
                 print("status code: ", response.status_code)
@@ -107,6 +108,7 @@ class api_request():
             print("Error during POST request:", e)
         if response:
             print("Status: : ", response.status_code)
+        return response
 
     def head_method(self, url):
         response = None

@@ -43,4 +43,21 @@ class metrics:
         #                                     status and success
         return _empty_metric
 
+    def update_metric(self):
 
+        st = config.st()
+        _device_data = {}
+        _device_data['device_id'] =st.getvalueifkeypresent('mac')
+        _device_data['arch'] =st.getvalueifkeypresent('arch')
+        _device_data['hw_version_str'] =st.getvalueifkeypresent('hw_version_str')
+        _device_data['board_id'] =st.getvalueifkeypresent('board_id')
+        _empty_metric = self.getemptymetric()
+        _empty_metric["action"] = "Download Update"
+        _empty_metric["attribute_name"] = "update_check"
+        _empty_metric["motive"] = "Update with new version"
+        _empty_metric["record_date"] = 0
+        _empty_metric["device_data"] = _device_data
+        _empty_metric["device_id"] = _device_data['device_id']
+        _empty_metric["metric_name"] = "update"
+        _empty_metric["label_data"] = st.getvalueifkeypresent('mac') + '-' + str(random.random())
+        return _empty_metric

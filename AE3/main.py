@@ -121,6 +121,5 @@ json_metric = str(json.dumps(upload_metric))
 metric_obj['payload'] = json_metric
 api_req.update_args(metric_obj)
 asyncio.run(api_req.make_http_call())
-
 update_process = update.update(cfgdata)
 update_process.checkandgetupdate()
